@@ -13,7 +13,6 @@ This repository contains my testing and exploration of [Claude-Flow v2.0.0 Alpha
 - **Original Repository**: [ruvnet/claude-flow](https://github.com/ruvnet/claude-flow)
 - **Claude Code**: [@anthropic-ai/claude-code](https://www.npmjs.com/package/@anthropic-ai/claude-code)
 - **MCP Documentation**: [Model Context Protocol](https://github.com/modelcontextprotocol)
-- **Testing Framework**: Custom test suite for AI orchestration
 
 ---
 
