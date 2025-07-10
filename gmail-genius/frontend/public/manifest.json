@@ -1,1 +1,73 @@
-{\n  \"short_name\": \"Gmail Genius\",\n  \"name\": \"Gmail Genius - AI-powered email management\",\n  \"description\": \"Smart email management with AI-powered insights, filtering, and analysis\",\n  \"icons\": [\n    {\n      \"src\": \"favicon.ico\",\n      \"sizes\": \"64x64 32x32 24x24 16x16\",\n      \"type\": \"image/x-icon\"\n    },\n    {\n      \"src\": \"logo192.png\",\n      \"type\": \"image/png\",\n      \"sizes\": \"192x192\",\n      \"purpose\": \"maskable\"\n    },\n    {\n      \"src\": \"logo512.png\",\n      \"type\": \"image/png\",\n      \"sizes\": \"512x512\",\n      \"purpose\": \"maskable\"\n    }\n  ],\n  \"start_url\": \".\",\n  \"display\": \"standalone\",\n  \"theme_color\": \"#667eea\",\n  \"background_color\": \"#ffffff\",\n  \"orientation\": \"portrait-primary\",\n  \"scope\": \"/\",\n  \"categories\": [\"productivity\", \"business\", \"utilities\"],\n  \"screenshots\": [\n    {\n      \"src\": \"screenshot1.png\",\n      \"sizes\": \"1280x720\",\n      \"type\": \"image/png\",\n      \"form_factor\": \"wide\"\n    },\n    {\n      \"src\": \"screenshot2.png\",\n      \"sizes\": \"750x1334\",\n      \"type\": \"image/png\",\n      \"form_factor\": \"narrow\"\n    }\n  ],\n  \"shortcuts\": [\n    {\n      \"name\": \"Inbox\",\n      \"short_name\": \"Inbox\",\n      \"description\": \"View your inbox\",\n      \"url\": \"/dashboard?label=INBOX\",\n      \"icons\": [\n        {\n          \"src\": \"inbox-icon.png\",\n          \"sizes\": \"96x96\"\n        }\n      ]\n    },\n    {\n      \"name\": \"Compose\",\n      \"short_name\": \"Compose\",\n      \"description\": \"Compose new email\",\n      \"url\": \"/compose\",\n      \"icons\": [\n        {\n          \"src\": \"compose-icon.png\",\n          \"sizes\": \"96x96\"\n        }\n      ]\n    }\n  ],\n  \"related_applications\": [],\n  \"prefer_related_applications\": false\n}
+{
+  "short_name": "Gmail Genius",
+  "name": "Gmail Genius - AI-powered email management",
+  "description": "Smart email management with AI-powered insights, filtering, and analysis",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#667eea",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["productivity", "business", "utilities"],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Inbox",
+      "short_name": "Inbox",
+      "description": "View your inbox",
+      "url": "/dashboard?label=INBOX",
+      "icons": [
+        {
+          "src": "inbox-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Compose",
+      "short_name": "Compose",
+      "description": "Compose new email",
+      "url": "/compose",
+      "icons": [
+        {
+          "src": "compose-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
