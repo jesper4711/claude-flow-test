@@ -57,6 +57,27 @@ class GeminiService {
   }
 
   /**
+   * Clean AI response by removing markdown formatting
+   */
+  cleanJsonResponse(response) {
+    if (!response) return response;
+    
+    // Remove markdown code blocks
+    let cleaned = response.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+    
+    // Remove any leading/trailing whitespace
+    cleaned = cleaned.trim();
+    
+    // If there are multiple JSON objects, take the first one
+    const jsonMatch = cleaned.match(/\{[\s\S]*?\}/);
+    if (jsonMatch) {
+      cleaned = jsonMatch[0];
+    }
+    
+    return cleaned;
+  }
+
+  /**
    * Generate AI response with caching and rate limiting
    */
   async generateResponse(prompt, analysisType = 'general') {
@@ -111,7 +132,8 @@ Respond with ONLY a JSON object in this format:
 
     try {
       const response = await this.generateResponse(prompt, 'importance');
-      return JSON.parse(response);
+      const cleanedResponse = this.cleanJsonResponse(response);
+      return JSON.parse(cleanedResponse);
     } catch (error) {
       console.error('Importance analysis error:', error);
       return { importance: 5, reasoning: 'Error analyzing importance', urgency: 'medium' };
@@ -139,7 +161,8 @@ Respond with ONLY a JSON object in this format:
 
     try {
       const response = await this.generateResponse(prompt, 'summary');
-      return JSON.parse(response);
+      const cleanedResponse = this.cleanJsonResponse(response);
+      return JSON.parse(cleanedResponse);
     } catch (error) {
       console.error('Summary analysis error:', error);
       return { 
@@ -178,7 +201,8 @@ Respond with ONLY a JSON object in this format:
 
     try {
       const response = await this.generateResponse(prompt, 'actions');
-      return JSON.parse(response);
+      const cleanedResponse = this.cleanJsonResponse(response);
+      return JSON.parse(cleanedResponse);
     } catch (error) {
       console.error('Action items analysis error:', error);
       return { 
@@ -211,7 +235,8 @@ Respond with ONLY a JSON object in this format:
 
     try {
       const response = await this.generateResponse(prompt, 'sentiment');
-      return JSON.parse(response);
+      const cleanedResponse = this.cleanJsonResponse(response);
+      return JSON.parse(cleanedResponse);
     } catch (error) {
       console.error('Sentiment analysis error:', error);
       return { 
@@ -248,7 +273,8 @@ Respond with ONLY a JSON object in this format:
 
     try {
       const response = await this.generateResponse(prompt, 'classification');
-      return JSON.parse(response);
+      const cleanedResponse = this.cleanJsonResponse(response);
+      return JSON.parse(cleanedResponse);
     } catch (error) {
       console.error('Classification analysis error:', error);
       return { 

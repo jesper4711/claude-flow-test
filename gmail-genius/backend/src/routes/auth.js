@@ -33,9 +33,19 @@ router.get('/google/callback', (req, res, next) => {
 }, (req, res) => {
   try {
     logger.info(`User authenticated successfully: ${req.user.email}`);
+    logger.info(`Session ID: ${req.sessionID}`);
+    logger.info(`Session authenticated: ${req.isAuthenticated()}`);
     
-    // Redirect to frontend with success
-    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`);
+    // Ensure session is saved before redirect
+    req.session.save((err) => {
+      if (err) {
+        logger.error('Error saving session:', err);
+        return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/login?error=session_save_failed`);
+      }
+      
+      logger.info('Session saved successfully, redirecting to dashboard');
+      res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard`);
+    });
     
   } catch (error) {
     logger.error('Error in OAuth callback:', error);
@@ -46,6 +56,10 @@ router.get('/google/callback', (req, res, next) => {
 // Check authentication status
 router.get('/status', (req, res) => {
   try {
+    logger.info(`Auth status check - Session ID: ${req.sessionID}`);
+    logger.info(`Auth status check - Is authenticated: ${req.isAuthenticated()}`);
+    logger.info(`Auth status check - User exists: ${!!req.user}`);
+    
     if (req.isAuthenticated() && req.user) {
       logger.info(`Auth status check for user: ${req.user.email}`);
       
@@ -62,6 +76,9 @@ router.get('/status', (req, res) => {
       });
     } else {
       logger.info('Auth status check: not authenticated');
+      if (req.session) {
+        logger.info(`Session data: ${JSON.stringify(req.session)}`);
+      }
       res.json({ authenticated: false });
     }
   } catch (error) {
@@ -119,7 +136,7 @@ router.post('/logout', (req, res) => {
           return res.status(500).json({ error: 'Session cleanup failed' });
         }
         
-        res.clearCookie('connect.sid');
+        res.clearCookie('gmail-genius-session');
         res.json({ message: 'Logged out successfully' });
       });
     });
@@ -175,7 +192,7 @@ router.post('/revoke', async (req, res) => {
           return res.status(500).json({ error: 'Session cleanup failed after revoke' });
         }
         
-        res.clearCookie('connect.sid');
+        res.clearCookie('gmail-genius-session');
         res.json({ message: 'Tokens revoked and logged out successfully' });
       });
     });
