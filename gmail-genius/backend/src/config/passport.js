@@ -72,7 +72,7 @@ passport.serializeUser((user, done) => {
 });
 
 // Deserialize user from session
-passport.deserializeUser((sessionUser, done) => {
+passport.deserializeUser(async (sessionUser, done) => {
   try {
     // Retrieve tokens from secure storage
     const tokens = global.userTokens && global.userTokens[sessionUser.id];
@@ -84,12 +84,44 @@ passport.deserializeUser((sessionUser, done) => {
     
     // Check if token is expired
     if (Date.now() > tokens.tokenExpiry) {
-      logger.warn(`Token expired for user: ${sessionUser.email}`);
-      // In production, implement token refresh logic here
-      return done(null, false);
+      logger.warn(`Token expired for user: ${sessionUser.email}, attempting refresh`);
+      
+      // Try to refresh the token instead of logging out
+      try {
+        if (tokens.refreshToken) {
+          const newTokens = await refreshAccessToken(tokens.refreshToken);
+          
+          // Update stored tokens
+          global.userTokens[sessionUser.id] = {
+            ...tokens,
+            accessToken: newTokens.accessToken,
+            tokenExpiry: newTokens.tokenExpiry
+          };
+          
+          logger.info(`Token refreshed successfully for user: ${sessionUser.email}`);
+          
+          // Reconstruct user object with refreshed tokens
+          const user = {
+            ...sessionUser,
+            accessToken: newTokens.accessToken,
+            refreshToken: tokens.refreshToken,
+            tokenExpiry: newTokens.tokenExpiry
+          };
+          
+          return done(null, user);
+        } else {
+          logger.warn(`No refresh token available for user: ${sessionUser.email}`);
+          return done(null, false);
+        }
+      } catch (refreshError) {
+        logger.error('Token refresh failed during deserialization:', refreshError);
+        // Clear invalid tokens
+        delete global.userTokens[sessionUser.id];
+        return done(null, false);
+      }
     }
     
-    // Reconstruct full user object
+    // Token is still valid, reconstruct full user object
     const user = {
       ...sessionUser,
       accessToken: tokens.accessToken,

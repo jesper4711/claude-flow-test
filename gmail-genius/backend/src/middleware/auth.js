@@ -14,11 +14,25 @@ function requireAuth(req, res, next) {
     // Check if user has valid tokens
     const tokens = global.userTokens && global.userTokens[req.user.id];
     if (!tokens || !tokens.accessToken) {
-      logger.warn(`No valid tokens found for user ${req.user.email}`);
-      return res.status(401).json({ 
-        error: 'Invalid or expired tokens',
-        message: 'Please re-authenticate'
+      logger.warn(`No valid tokens found for user ${req.user.email}, clearing session`);
+      
+      // Clear the session to prevent redirect loops
+      req.logout((err) => {
+        if (err) {
+          logger.error('Error during logout in requireAuth:', err);
+        }
+        req.session.destroy((err) => {
+          if (err) {
+            logger.error('Error destroying session in requireAuth:', err);
+          }
+          res.clearCookie('connect.sid');
+          return res.status(401).json({ 
+            error: 'Session expired',
+            message: 'Please re-authenticate'
+          });
+        });
       });
+      return;
     }
     
     logger.debug(`Authenticated request to ${req.path} for user: ${req.user.email}`);
